@@ -1,0 +1,44 @@
+@startuml
+title 策略方法模式（飞机射击）UML类图
+skinparam class {
+    BackgroundColor #f0fff0
+    BorderColor #2c3e50
+    ArrowColor #2c3e50
+}
+
+' ========== 抽象策略（Strategy），射击基类 ==========
+abstract class ShootStrategy {
+    + {abstract} shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+' ========== 具体策略（Concrete Strategy），不同射击模式 ==========
+class SingleStraightStrategy {
+    + shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+class ScatterStrategy {
+    + shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+class RingShootStrategy {
+    + shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+class NoShootStrategy {
+    + shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+' ========== 环境角色（Context），持有策略实例 ==========
+abstract class AbstractAircraft {
+    # shootStrategy: ShootStrategy
+}
+
+' 策略实现关系（和你工厂模式的继承箭头格式完全一致）
+ShootStrategy <|-- SingleStraightStrategy
+ShootStrategy <|-- ScatterStrategy
+ShootStrategy <|-- RingShootStrategy
+ShootStrategy <|-- NoShootStrategy
+
+' 飞机与策略的关联关系
+AbstractAircraft --> ShootStrategy : 持有
+@enduml

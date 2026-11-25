@@ -1,0 +1,55 @@
+@startuml
+title DAO模式（排行榜数据管理）UML类图
+skinparam class {
+    BackgroundColor #f0fff0
+    BorderColor #2c3e50
+    ArrowColor #2c3e50
+}
+
+' 1. 实体类（VO）
+class ScoreRecord {
+    - userName: String
+    - score: int
+    - gameTime: LocalDateTime
+    - difficulty: String
+    + getUserName(): String
+    + getScore(): int
+    + getGameTime(): LocalDateTime
+    + getDifficulty(): String
+    + getFormattedTime(): String
+    + toString(): String
+}
+
+' 2. DAO接口
+interface ScoreDao {
+    + getAllRecords(): List<ScoreRecord>
+    + addRecord(ScoreRecord record): void
+    + deleteRecord(int rank): void
+}
+
+' 3. DAO实现类
+class ScoreDaoImpl {
+    - final FORMATTER: DateTimeFormatter
+    - difficulty: String
+    - filePath: String
+    + ScoreDaoImpl(String difficulty)
+    + getAllRecords(): List<ScoreRecord>
+    + addRecord(ScoreRecord record): void
+    + deleteRecord(int rank): void
+    + printRankingList(): void
+    - initFile(): void
+}
+
+' 4. 调用类（游戏主逻辑）
+class Game {
+    - gameDifficulty: String
+    - scoreDao: ScoreDao
+    + gameOver(): void
+}
+
+' 关系定义
+ScoreDao <|.. ScoreDaoImpl : 实现
+Game --> ScoreDao : 依赖
+Game --> ScoreRecord : 依赖
+ScoreDao --> ScoreRecord : 关联
+@enduml

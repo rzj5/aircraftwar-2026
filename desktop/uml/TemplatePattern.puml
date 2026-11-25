@@ -1,0 +1,54 @@
+@startuml
+title 模板模式（游戏难度体系）UML类图
+skinparam class {
+    BackgroundColor #f0fff0
+    BorderColor #2c3e50
+    ArrowColor #2c3e50
+}
+
+' 1. 抽象模板类（BaseGame）
+abstract class BaseGame {
+    - heroAircraft: HeroAircraft
+    - enemyAircrafts: List<AbstractAircraft>
+    - heroBullets: List<BaseBullet>
+    - enemyBullets: List<BaseBullet>
+    - props: List<BaseProp>
+    - score: int
+    - gameOverFlag: boolean
+    - superBossAlive: boolean
+    - enemySpawnCycle: double
+    - shootCycle: double
+    + action(): void
+    + crashCheckAction(): void
+    + handleProp(p: BaseProp): void
+    # allowSuperBoss(): boolean
+    # increaseDifficulty(): void
+}
+
+' 2. 具体实现类（三个难度）
+class EasyGame extends BaseGame {
+    + allowSuperBoss(): boolean
+    + increaseDifficulty(): void
+}
+
+class NormalGame extends BaseGame {
+    + allowSuperBoss(): boolean
+    + increaseDifficulty(): void
+}
+
+class HardGame extends BaseGame {
+    + allowSuperBoss(): boolean
+    + increaseDifficulty(): void
+}
+
+' 3. 调用类（开始菜单）
+class StartMenuPanel {
+    - startGame(difficulty: String): void
+}
+
+' 关系定义
+BaseGame <|-- EasyGame : 继承
+BaseGame <|-- NormalGame : 继承
+BaseGame <|-- HardGame : 继承
+StartMenuPanel --> BaseGame : 依赖
+@enduml

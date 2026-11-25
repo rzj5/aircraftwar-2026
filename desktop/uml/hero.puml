@@ -1,0 +1,28 @@
+@startuml
+' 英雄机单例模式标准UML类图，完全符合UML规范+代码匹配
+title HeroAircraft Singleton Pattern
+
+class HeroAircraft {
+    ' 私有静态实例，volatile标注，静态加下划线
+    - {static} {volatile} instance: HeroAircraft
+    ' 私有构造方法
+    - HeroAircraft(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    ' 公有的静态带参初始化方法，静态加下划线
+    + {static} getInstance(locationX:int, locationY:int, speedX:int, speedY:int, hp:int): HeroAircraft
+    ' 公有的静态无参获取方法，静态加下划线
+    + {static} getInstance(): HeroAircraft
+    ' 核心业务方法
+    + forward(): void
+    + shoot(): List<BaseBullet>
+}
+
+' 标注单例模式说明
+note right of HeroAircraft
+单例模式：
+保证游戏全局仅有一个英雄机实例
+提供全局唯一的访问入口
+end note
+
+' 补充继承关系（可选，更完整，符合实验的继承结构要求）
+HeroAircraft --|> AbstractAircraft
+@enduml

@@ -1,0 +1,90 @@
+@startuml
+title 观察者模式（炸弹/冰冻道具）UML类图
+skinparam class {
+    BackgroundColor #f0fff0
+    BorderColor #2c3e50
+    ArrowColor #2c3e50
+}
+
+' 1. 观察者模式核心接口
+interface GameSubject {
+    + addObserver(observer: GameObserver): void
+    + removeObserver(observer: GameObserver): void
+    + notifyBomb(): void
+    + notifyFreeze(): void
+}
+
+interface GameObserver {
+    + onBombEffect(): void
+    + onFreezeEffect(): void
+}
+
+' 2. 道具体系（被观察者）
+abstract class BaseProp {
+    + active(heroAircraft: HeroAircraft): void
+}
+
+class BombProp implements GameSubject {
+    - observers: List<GameObserver>
+    + addObserver(observer: GameObserver): void
+    + removeObserver(observer: GameObserver): void
+    + notifyBomb(): void
+    + notifyFreeze(): void
+    + active(heroAircraft: HeroAircraft): void
+}
+
+class FreezeProp implements GameSubject {
+    - observers: List<GameObserver>
+    + addObserver(observer: GameObserver): void
+    + removeObserver(observer: GameObserver): void
+    + notifyBomb(): void
+    + notifyFreeze(): void
+    + active(heroAircraft: HeroAircraft): void
+}
+
+' 3. 飞行物体系（观察者）
+abstract class AbstractAircraft implements GameObserver {
+    + onBombEffect(): void
+    + onFreezeEffect(): void
+}
+
+abstract class BaseBullet implements GameObserver {
+    + onBombEffect(): void
+    + onFreezeEffect(): void
+}
+
+' 4. 具体实现类
+class MobEnemy extends AbstractAircraft {
+    + onFreezeEffect(): void
+}
+
+class EliteEnemy extends AbstractAircraft {
+    + onFreezeEffect(): void
+}
+
+class ElitePlusEnemy extends AbstractAircraft {
+    + onFreezeEffect(): void
+}
+
+class BossEnemy extends AbstractAircraft {
+    + onFreezeEffect(): void
+}
+
+class SuperBoss extends AbstractAircraft {
+    + onFreezeEffect(): void
+}
+
+class EnemyBullet extends BaseBullet {
+    + onFreezeEffect(): void
+}
+
+' 关系定义
+BaseProp <|-- BombProp : 继承
+BaseProp <|-- FreezeProp : 继承
+AbstractAircraft <|-- MobEnemy : 继承
+AbstractAircraft <|-- EliteEnemy : 继承
+AbstractAircraft <|-- ElitePlusEnemy : 继承
+AbstractAircraft <|-- BossEnemy : 继承
+AbstractAircraft <|-- SuperBoss : 继承
+BaseBullet <|-- EnemyBullet : 继承
+@enduml

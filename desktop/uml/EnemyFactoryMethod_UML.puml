@@ -1,0 +1,59 @@
+@startuml
+title 工厂方法模式（敌机创建）UML类图
+skinparam class {
+    BackgroundColor #f0fff0
+    BorderColor #2c3e50
+    ArrowColor #2c3e50
+}
+
+' ========== 抽象产品（Product）：敌机基类 ==========
+abstract class AbstractAircraft {
+    # hp: int
+    # maxHp: int
+    # speedX: int
+    # speedY: int
+    # shootCounter: int
+    # {static} SHOOT_INTERVAL: int
+    + AbstractAircraft(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    + decreaseHp(decrease:int): void
+    + getHp(): int
+    + getMaxHp(): int
+    + canShoot(): boolean
+    + {abstract} shoot(): List<BaseBullet>
+}
+
+' ========== 具体产品（ConcreteProduct）：各类敌机 ==========
+class MobEnemy extends AbstractAircraft
+class EliteEnemy extends AbstractAircraft
+class ElitePlusEnemy extends AbstractAircraft
+class BossEnemy extends AbstractAircraft
+
+' ========== 抽象工厂（Creator）：敌机工厂基类 ==========
+abstract class EnemyFactory {
+    + {abstract} createEnemy(): AbstractAircraft
+}
+
+' ========== 具体工厂（ConcreteCreator）：各类敌机专属工厂 ==========
+class MobEnemyFactory extends EnemyFactory
+class EliteEnemyFactory extends EnemyFactory
+class ElitePlusEnemyFactory extends EnemyFactory
+class BossEnemyFactory extends EnemyFactory
+
+' ========== 客户端（Client）：游戏主类 ==========
+class Game {
+    - enemyAircrafts: List<AbstractAircraft>
+    - mobEnemyFactory: MobEnemyFactory
+    - eliteEnemyFactory: EliteEnemyFactory
+    - elitePlusEnemyFactory: ElitePlusEnemyFactory
+    - bossEnemyFactory: BossEnemyFactory
+}
+
+' ========== 类之间的关系定义 ==========
+EnemyFactory ..> AbstractAircraft : 依赖并创建
+MobEnemyFactory ..> MobEnemy : 创建实例
+EliteEnemyFactory ..> EliteEnemy : 创建实例
+ElitePlusEnemyFactory ..> ElitePlusEnemy : 创建实例
+BossEnemyFactory ..> BossEnemy : 创建实例
+Game ..> EnemyFactory : 调用工厂方法
+Game *-- AbstractAircraft : 持有敌机集合
+@enduml

@@ -1,0 +1,144 @@
+@startuml
+' 飞机大战实验 完整继承关系类图
+' 完全匹配项目代码，符合UML规范与实验要求
+title Aircraft War Complete Inheritance Class Diagram
+
+
+skinparam class {
+    BackgroundColor #f0fff0
+    BorderColor #2c3e50
+    ArrowColor #2c3e50
+}
+
+' ====================== 顶层抽象父类：所有飞行对象的基类 ======================
+abstract class AbstractFlyingObject {
+    # locationX: int
+    # locationY: int
+    # speedX: int
+    # speedY: int
+    # image: BufferedImage
+    # width: int
+    # height: int
+    # isValid: boolean
+    + AbstractFlyingObject(locationX:int, locationY:int, speedX:int, speedY:int)
+    + forward(): void
+    + crash(flyingObject:AbstractFlyingObject): boolean
+    + setLocation(locationX:double, locationY:double): void
+    + getLocationX(): int
+    + getLocationY(): int
+    + getSpeedX(): int
+    + getSpeedY(): int
+    + getImage(): BufferedImage
+    + getWidth(): int
+    + getHeight(): int
+    + notValid(): boolean
+    + vanish(): void
+}
+
+' ====================== 飞机体系：所有飞机的抽象父类 ======================
+abstract class AbstractAircraft extends AbstractFlyingObject {
+    # maxHp: int
+    # hp: int
+    + AbstractAircraft(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    + decreaseHp(decrease:int): void
+    + getHp(): int
+    + getMaxHp(): int
+    + setHp(hp:int): void
+    + abstract shoot(): List<BaseBullet>
+}
+
+' 英雄机（单例模式实现，完全匹配你的代码）
+class HeroAircraft extends AbstractAircraft {
+    - {static} {volatile} instance: HeroAircraft
+    - shootNum: int
+    - power: int
+    - direction: int
+    ' 单例核心：私有化构造方法
+    - HeroAircraft(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    ' 单例全局访问入口
+    + {static} getInstance(locationX:int, locationY:int, speedX:int, speedY:int, hp:int): HeroAircraft
+    + {static} getInstance(): HeroAircraft
+    + forward(): void
+    + shoot(): List<BaseBullet>
+}
+
+' 所有敌机实现类
+class MobEnemy extends AbstractAircraft {
+    + MobEnemy(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    + forward(): void
+    + shoot(): List<BaseBullet>
+}
+
+class EliteEnemy extends AbstractAircraft {
+    + EliteEnemy(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    + forward(): void
+    + shoot(): List<BaseBullet>
+}
+
+class ElitePlusEnemy extends AbstractAircraft {
+    + ElitePlusEnemy(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    + forward(): void
+    + shoot(): List<BaseBullet>
+}
+
+class BossEnemy extends AbstractAircraft {
+    + BossEnemy(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    + forward(): void
+    + shoot(): List<BaseBullet>
+}
+
+class SuperBoss extends AbstractAircraft {
+    + SuperBoss(locationX:int, locationY:int, speedX:int, speedY:int, hp:int)
+    + forward(): void
+    + shoot(): List<BaseBullet>
+}
+
+' ====================== 子弹体系 ======================
+abstract class BaseBullet extends AbstractFlyingObject {
+    - power: int
+    + BaseBullet(locationX:int, locationY:int, speedX:int, speedY:int, power:int)
+    + forward(): void
+    + getPower(): int
+}
+
+class HeroBullet extends BaseBullet {
+    + HeroBullet(locationX:int, locationY:int, speedX:int, speedY:int, power:int)
+}
+
+class EnemyBullet extends BaseBullet {
+    + EnemyBullet(locationX:int, locationY:int, speedX:int, speedY:int, power:int)
+}
+
+' ====================== 道具体系 ======================
+abstract class BaseProp extends AbstractFlyingObject {
+    # activeTime: int
+    + BaseProp(locationX:int, locationY:int, speedX:int, speedY:int)
+    + abstract active(heroAircraft:HeroAircraft): void
+}
+
+class HpProp extends BaseProp {
+    - recoverHp: int
+    + HpProp(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft): void
+}
+
+class FireSupplyProp extends BaseProp {
+    + FireSupplyProp(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft): void
+}
+
+class FirePlusSupplyProp extends BaseProp {
+    + FirePlusSupplyProp(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft): void
+}
+
+class FreezeProp extends BaseProp {
+    + FreezeProp(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft): void
+}
+
+class BombProp extends BaseProp {
+    + BombProp(locationX:int, locationY:int, speedX:int, speedY:int)
+    + active(heroAircraft:HeroAircraft): void
+}
+@enduml

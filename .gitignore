@@ -1,0 +1,18 @@
+# 构建产物
+build/
+out/
+*.apk
+*.dex
+*.class
+# Gradle / IDE 本地配置（含本机绝对路径，禁止入库）
+local.properties
+.gradle/
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+# 系统与临时文件
+.DS_Store
+Thumbs.db
+*.log

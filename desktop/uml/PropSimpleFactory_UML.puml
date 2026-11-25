@@ -1,0 +1,41 @@
+@startuml
+title 简单工厂模式（道具创建）UML类图
+skinparam class {
+    BackgroundColor #f0f8ff
+    BorderColor #2c3e50
+    ArrowColor #2c3e50
+}
+
+' ========== 抽象产品（Product）：道具基类 ==========
+abstract class BaseProp {
+    + BaseProp(locationX:int, locationY:int, speedX:int, speedY:int)
+    + {abstract} active(heroAircraft:HeroAircraft): void
+}
+
+' ========== 具体产品（ConcreteProduct）：各类道具 ==========
+class HpProp extends BaseProp
+class FireSupplyProp extends BaseProp
+class FirePlusSupplyProp extends BaseProp
+class BombProp extends BaseProp
+class FreezeProp extends BaseProp
+
+' ========== 简单工厂类（SimpleFactory）：道具工厂 ==========
+class PropSimpleFactory {
+    + {static} createProp(type:String, x:int, y:int, speedX:int, speedY:int): BaseProp
+}
+
+' ========== 客户端（Client）：游戏主类 ==========
+class Game {
+    - props: List<BaseProp>
+}
+
+' ========== 类之间的关系定义 ==========
+PropSimpleFactory ..> BaseProp : 依赖并创建
+PropSimpleFactory ..> HpProp : 创建实例
+PropSimpleFactory ..> FireSupplyProp : 创建实例
+PropSimpleFactory ..> FirePlusSupplyProp : 创建实例
+PropSimpleFactory ..> BombProp : 创建实例
+PropSimpleFactory ..> FreezeProp : 创建实例
+Game ..> PropSimpleFactory : 调用工厂方法
+Game *-- BaseProp : 持有道具集合
+@enduml
