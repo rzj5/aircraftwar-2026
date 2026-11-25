@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#FF10233A"
+    android:padding="32dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/game_title"
+        android:textColor="#FFFFFFFF"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/game_subtitle"
+        android:textColor="#FF9FD0FF"
+        android:textSize="14sp"
+        android:layout_marginBottom="40dp" />
+
+    <Button
+        android:id="@+id/button_easy"
+        android:layout_width="220dp"
+        android:layout_height="56dp"
+        android:text="@string/mode_easy"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/button_normal"
+        android:layout_width="220dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/mode_normal"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/button_hard"
+        android:layout_width="220dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/mode_hard"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/button_rank"
+        android:layout_width="220dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/rank_title"
+        android:textSize="16sp" />
+
+    <Switch
+        android:id="@+id/switch_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/music_switch"
+        android:textColor="#FFFFFFFF"
+        android:textSize="16sp" />
+</LinearLayout>

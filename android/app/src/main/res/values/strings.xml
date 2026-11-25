@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">飞机大战</string>
+    <string name="game_title">飞 机 大 战</string>
+    <string name="game_subtitle">AircraftWar2026 · 选择难度开始游戏</string>
+    <string name="mode_easy">简单模式</string>
+    <string name="mode_normal">普通模式</string>
+    <string name="mode_hard">困难模式</string>
+    <string name="rank_title">排行榜</string>
+    <string name="music_switch">音乐 / 音效</string>
+    <string name="back_to_menu">返回主菜单</string>
+</resources>
