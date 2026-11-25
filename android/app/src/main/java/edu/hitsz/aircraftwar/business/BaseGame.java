@@ -335,7 +335,9 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         if (allowSuperBoss() && score >= SUPER_BOSS_SCORE && !superBossAlive) {
             try {
                 MyMediaPlayer.getInstance().play(R.raw.bgm_boss);
-                enemyAircrafts.add(superBossFactory.createEnemy());
+                AbstractAircraft superBoss = superBossFactory.createEnemy();
+                enemyAircrafts.add(superBoss);
+                Log.i(TAG, "生成超级 Boss，血量=" + superBoss.getMaxHp());
                 superBossAlive = true;
             } catch (Exception e) {
                 Log.e(TAG, "生成超级 Boss 失败", e);

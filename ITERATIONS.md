@@ -3,7 +3,7 @@
 按时间顺序记录每一轮迭代：**改了什么 / 为什么改 / 实测结果**。每轮的代码改动与本文件对应条目在同一提交里入库。
 
 实测环境（后续各轮共用，不再重复）：
-- 主机 Windows，Android SDK 置于 `C:\androidsdk`（platform-tools、platforms android-30/34、build-tools 34.0.0、emulator、`system-images;android-30;google_apis;x86_64`）。
+- 主机 Windows；Android SDK 置于**不含中文的路径**（写作时用 `C:/androidsdk`，可换成任意 ASCII 路径），已装 platform-tools、platforms android-30/34、build-tools 34.0.0、emulator、`system-images;android-30;google_apis;x86_64`。复现时请把下文命令里的 SDK 路径替换为你自己的。
 - 构建：JDK 17（`jdk-17.0.2`，含 `jlink`）+ Gradle 8.7，`gradle --no-daemon assembleDebug`。
 - 运行：Android Emulator 37.3.10.0，AVD `aw30`（Android 11 / API 30 / 1080×2340），`-gpu swiftshader_indirect` 软件渲染。
 
@@ -58,3 +58,28 @@
 - 重开局：返回主菜单再选难度，HUD 从 `SCORE: 0 / LIFE: 100` 重新开始。
 - 线程自查：游戏内 `ps -AT | grep -c game-loop` = 1，按返回键后 = 0（绘制线程已停）。
 - 音频：进游戏 3 s 与 8 s 分别查 `dumpsys media.audio_flinger` 均为 `1 active` 的 BGM 轨；关掉音乐开关后 `0 active`。
+
+---
+
+## 第 2 轮　修复：困难模式超级 Boss 血量倍率不生效
+
+**问题现象**
+困难模式下超级 Boss 血量与普通模式完全相同（均为 300），三档难度只有敌机生成节奏和射击节奏不同，"困难"缺少设计中的血量加成。
+
+**原因**
+桌面版 `edu.hitsz.application.HardGame.action()` 的每局开始时调用 `applyBossHpMultiplier()`：`bossHpMul += 0.2; superBossFactory = new SuperBossFactory(bossHpMul);`。
+迁移时按 PPT「照搬纯逻辑」把 `applyBossHpMultiplier()` 方法原样搬进了 Android 的 `business/HardGame.java`，但没有搬调用点（桌面版在 `action()` 里，Android 的循环已上移到 `BaseGame.run()`）→ 方法成为死代码，倍率永远停留在初始值 `1.0`。
+
+**改动内容**
+- `android/app/src/main/java/edu/hitsz/aircraftwar/business/HardGame.java`：在构造器末尾（设置 `enemySpawnCycle = 12; shootCycle = 15;` 之后）调用一次 `applyBossHpMultiplier();`，并补 `Log.i(TAG, "困难模式开局，超级Boss血量倍率=" + bossHpMul);`（`TAG = "HardGame"`），使倍率可在 Logcat 直接核对。
+- `android/app/src/main/java/edu/hitsz/aircraftwar/business/BaseGame.java`：`enemySpawnProcess()` 中生成超级 Boss 时先取出实例再入列，并 `Log.i(TAG, "生成超级 Boss，血量=" + superBoss.getMaxHp());`（异常分支 `Log.e(TAG, "生成超级 Boss 失败", e);`），用于实测取证。
+
+**改动原因**
+- 最小改动：不改变类结构、不引入新状态，只补回漏掉的调用点，与桌面版语义一致（每开一局困难模式倍率累加 0.2）。
+- 加日志是为了让"倍率确实生效"这件事有可复核的运行时证据，而不是只靠读代码推断。
+
+**实测结果**
+- 构建：`assembleDebug` → `BUILD SUCCESSFUL`。
+- 困难模式进游戏后 Logcat：`HardGame: 困难模式开局，超级Boss血量倍率=1.2`。
+- 普通模式打到 200 分以上时 Logcat：`BaseGame: 生成超级 Boss，血量=300`（无倍率），画面出现巨型 Boss 且可被击落。
+- 困难模式超级 Boss 血量应为 300 × 1.2 = 360：倍率 `1.2`（Logcat 实测）与基础血量 `300`（普通模式 Logcat 实测）都有运行时证据，但**困难模式下未直接观测到超级 Boss 血条**（困难模式节奏快，自动化脚本打到 110 分即结束），360 这一数值由两个实测值按 `SuperBossFactory((int)(300*hpMultiplier))` 推算得出，不作为独立实测结论。
