@@ -59,6 +59,8 @@
 - 线程自查：游戏内 `ps -AT | grep -c game-loop` = 1，按返回键后 = 0（绘制线程已停）。
 - 音频：进游戏 3 s 与 8 s 分别查 `dumpsys media.audio_flinger` 均为 `1 active` 的 BGM 轨；关掉音乐开关后 `0 active`。
 
+> 提交组织说明：原工程的 step1–step5 五次中间提交里有三次（step1/step2/step4）单独编译会失败（`MainActivity` 提前引用了尚未加入的 `music` 包与 `GameActivity`）。为了让老师拿到的每一个提交都能编译运行，本仓库把这一段重组为一个完整的「第 1 轮」，逐子步骤的改动仍按 step1–step5 在下面写清。
+
 ---
 
 ## 第 2 轮　修复：困难模式超级 Boss 血量倍率不生效
